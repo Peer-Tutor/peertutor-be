@@ -8,10 +8,6 @@ public class StudentProfileReq {
 
     public String displayName;
 
-    @NotNull
-    @NotEmpty
-    public String accountName;
-
     public String introduction;
 
     public String subjects;

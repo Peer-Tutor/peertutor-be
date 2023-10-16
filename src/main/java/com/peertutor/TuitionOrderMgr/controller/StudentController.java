@@ -52,7 +52,6 @@ public class StudentController {
         PolicyFactory sanitizer = Sanitizers.FORMATTING;
         sanitizer.sanitize(req.name);
         sanitizer.sanitize(req.displayName);
-        sanitizer.sanitize(req.accountName);
         sanitizer.sanitize(req.introduction);
         sanitizer.sanitize(req.subjects);
 
