@@ -64,7 +64,7 @@ public class TutorCalendarController {
 		if (studentId.isPresent()) {
 			tutorCalendar = tutorCalendarService.getTutorCalendar(tutorId, studentId.get());
 		} else {
-			tutorCalendarService.getTutorCalendar(tutorId);
+			tutorCalendar = tutorCalendarService.getTutorCalendar(tutorId);
 		}
 
 		return ResponseEntity.ok().body(tutorCalendar);
