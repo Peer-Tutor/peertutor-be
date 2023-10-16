@@ -35,7 +35,6 @@ public class RecController {
 
     @GetMapping(path = "/rec")
     public @ResponseBody ResponseEntity<List<TutorDTO>> getTutorProfile(
-            @RequestParam(name = "name") String name,
             @RequestParam(name = "id") Long id
     ) {
         List<TutorDTO> tutors = recService.getTutorRec(id);

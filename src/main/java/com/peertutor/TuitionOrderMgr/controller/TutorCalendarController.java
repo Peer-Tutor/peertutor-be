@@ -38,11 +38,13 @@ public class TutorCalendarController {
 
 	@PostMapping(path = "/calendar")
 	@Transactional
-	public @ResponseBody ResponseEntity<List<TutorCalendar>> addAvailableDate(@RequestBody  @Valid TutorCalendarReq req) {
+	public @ResponseBody ResponseEntity<List<TutorCalendar>> addAvailableDate(
+			@RequestHeader("Name") String name,
+			@RequestBody  @Valid TutorCalendarReq req) {
 		if (req.availableDates == null) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
-
+		req.name = name;
 		List<TutorCalendar> saveTutorCalendar;
 		saveTutorCalendar = tutorCalendarService.addAvailableDate(req);
 
@@ -54,7 +56,6 @@ public class TutorCalendarController {
 
 	@GetMapping(path = "/calendar")
 	public @ResponseBody ResponseEntity<TutorCalendarRes> getReview(
-			@RequestParam(name = "name") String name,
 			@RequestParam(name = "tutorId") Long tutorId) {
 		TutorCalendarRes tutorCalendar = tutorCalendarService.getTutorCalendar(tutorId);
 		return ResponseEntity.ok().body(tutorCalendar);
@@ -63,7 +64,6 @@ public class TutorCalendarController {
 	@DeleteMapping(path = "/calendar")
 	@Transactional
 	public @ResponseBody ResponseEntity<TutorCalendarRes> getReview(
-			@RequestParam(name = "name") String name,
 			@RequestParam(name = "tutorId") Long tutorId,
 			@RequestParam(name = "dates") String dates) {
 		tutorCalendarService.deleteAvailableDates(tutorId, dates);

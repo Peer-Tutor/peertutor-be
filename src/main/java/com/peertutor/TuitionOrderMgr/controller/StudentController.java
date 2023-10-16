@@ -42,8 +42,12 @@ public class StudentController {
     }
 
     @PostMapping(path = "/student")
-    public @ResponseBody ResponseEntity<StudentProfileRes> createStudentProfile(@RequestBody @Valid StudentProfileReq req) throws ExistingTuitionOrderException, InputValidationException {
+    public @ResponseBody ResponseEntity<StudentProfileRes> createStudentProfile(
+            @RequestHeader("Name") String name,
+            @RequestBody @Valid StudentProfileReq req)
+            throws ExistingTuitionOrderException, InputValidationException {
         StudentDTO savedUser;
+        req.name = name;
 
         PolicyFactory sanitizer = Sanitizers.FORMATTING;
         sanitizer.sanitize(req.name);
@@ -80,16 +84,15 @@ public class StudentController {
 
     @GetMapping(path = "/student")
     public @ResponseBody ResponseEntity<StudentProfileRes> getStudentProfile(
-            @RequestParam(name = "name") String name,
-            @RequestParam(name = "accountName") Optional<String> accountName,
+            @RequestHeader("Name") String name,
             @RequestParam(name = "id") Optional<Long> id
     ) {
         StudentDTO studentRetrieved = null;
 
         if (id.isPresent()) {
             studentRetrieved = studentService.getStudentProfileById(id.get());
-        } else if (accountName.isPresent()) {
-            studentRetrieved = studentService.getStudentProfileByAccountName(accountName.get());
+        } else {
+            studentRetrieved = studentService.getStudentProfileByAccountName(name);
         }
 
         if (studentRetrieved == null) {

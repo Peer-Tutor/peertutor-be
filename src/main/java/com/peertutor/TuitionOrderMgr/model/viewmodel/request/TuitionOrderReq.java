@@ -6,8 +6,6 @@ import java.sql.Date;
 import java.util.List;
 
 public class TuitionOrderReq {
-    @NotNull
-    @NotEmpty
     public String name;
 
     public Long id;

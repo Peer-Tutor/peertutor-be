@@ -47,8 +47,11 @@ public class TuitionOrderController {
 
     @PostMapping(path = "/tuitionOrder")
     @ExceptionHandler(ExistingTuitionOrderException.class)
-    public @ResponseBody ResponseEntity createTuitionProfile(@RequestBody @Valid TuitionOrderReq req) {
+    public @ResponseBody ResponseEntity createTuitionProfile(
+            @RequestHeader("Name") String name,
+            @RequestBody @Valid TuitionOrderReq req) {
         TuitionOrderDTO savedTuitionOrder;
+        req.name = name;
 
         try {
             savedTuitionOrder = tuitionOrderService.createTuitionOrder(req);
@@ -68,7 +71,6 @@ public class TuitionOrderController {
 
     @GetMapping("/detailedTuitionOrders")
     public ResponseEntity<List<TuitionOrderDetailedDTO>> getAllDetailedTuitionOrders(
-            @RequestParam(name = "name") String name,
             @RequestParam(name = "studentId") Optional<Long> studentId,
             @RequestParam(name = "tutorId") Optional<Long> tutorId,
             @RequestParam(name = "status") Optional<Integer> status,
@@ -83,7 +85,6 @@ public class TuitionOrderController {
 
     @GetMapping("/tuitionOrders")
     public ResponseEntity<List<TuitionOrderDTO>> getTuitionOrderByCriteria(
-            @RequestParam(name = "name") String name,
             @RequestParam(name = "studentId") Optional<Long> studentId,
             @RequestParam(name = "tutorId") Optional<Long> tutorId,
             @RequestParam(name = "status") Optional<Integer> status,
@@ -97,7 +98,6 @@ public class TuitionOrderController {
 
     @GetMapping("/tuitionOrder")
     public ResponseEntity<TuitionOrderDTO> getTuitionOrderByCriteria(
-            @RequestParam(name = "name") String name,
             @RequestParam(name = "id") Long id
     ) {
         // get tutor name

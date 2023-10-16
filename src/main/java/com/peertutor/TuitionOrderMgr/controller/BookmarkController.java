@@ -41,9 +41,12 @@ public class BookmarkController {
     }
 
     @PostMapping(path = "/bookmark")
-    public @ResponseBody ResponseEntity<BookmarkRes> createBookmark(@RequestBody @Valid BookmarkReq req) {
+    public @ResponseBody ResponseEntity<BookmarkRes> createBookmark(
+            @RequestHeader("Name") String name,
+            @RequestBody @Valid BookmarkReq req) {
         BookmarkDTO savedBookmark;
 
+        req.name = name;
         savedBookmark = bookmarkService.createBookmark(req);
 
         if (savedBookmark == null) {
@@ -57,7 +60,6 @@ public class BookmarkController {
 
     @GetMapping(path = "/bookmark")
     public @ResponseBody ResponseEntity<List<BookmarkDTO>> getBookmark(
-            @RequestParam(name = "name") String name,
             @RequestParam(name = "studentId") Long studentId,
             Pageable pageable) {
         Page<BookmarkDTO> page = bookmarkService.getBookmark(studentId, pageable);
@@ -69,7 +71,6 @@ public class BookmarkController {
     @DeleteMapping(path = "/bookmark")
     @Transactional
     public @ResponseBody ResponseEntity<List<BookmarkDTO>> deleteCal(
-            @RequestParam(name = "name") String name,
             @RequestParam(name = "id") Optional<Long> id,
             @RequestParam(name = "tutorId") Optional<Long> tutorId,
             @RequestParam(name = "studentId") Optional<Long> studentId) {

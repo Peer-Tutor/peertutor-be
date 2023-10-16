@@ -49,9 +49,11 @@ public class TutorController {
     }
 
     @PostMapping(path = "/tutor")
-    public @ResponseBody ResponseEntity<TutorProfileRes> createTutorProfile(@RequestBody @Valid @Validated TutorProfileReq req) throws InputValidationException {
+    public @ResponseBody ResponseEntity<TutorProfileRes> createTutorProfile(
+            @RequestHeader("Name") String name,
+            @RequestBody @Valid @Validated TutorProfileReq req) throws InputValidationException {
         TutorDTO savedUser;
-
+        req.name = name;
         PolicyFactory sanitizer = Sanitizers.FORMATTING;
         sanitizer.sanitize(req.name);
         sanitizer.sanitize(req.displayName);
@@ -88,16 +90,15 @@ public class TutorController {
 
     @GetMapping(path = "/tutor")
     public @ResponseBody ResponseEntity<TutorProfileRes> getTutorProfile(
-            @RequestParam(name = "name") String name,
-            @RequestParam(name = "accountName") Optional<String> accountName,
+            @RequestHeader("Name") String name,
             @RequestParam(name = "id") Optional<Long> id
     ) {
         TutorDTO tutorDTO = null;
 
         if (id.isPresent()) {
             tutorDTO = tutorService.getTutorProfileById(id.get());
-        } else if (accountName.isPresent()) {
-            tutorDTO = tutorService.getTutorProfileByAccountName(accountName.get());
+        } else {
+            tutorDTO = tutorService.getTutorProfileByAccountName(name);
         }
 
         if (tutorDTO == null) {
@@ -116,7 +117,6 @@ public class TutorController {
 
     @GetMapping(path = "/tutors")
     public @ResponseBody ResponseEntity<List<TutorProfileRes>> getTutorProfile(
-            @RequestParam(name = "name") String name,
             @RequestParam(name = "displayName") Optional<String> displayName,
             @RequestParam(name = "subjects") Optional<String> subjects,
             @RequestParam(name = "introduction") Optional<String> introduction,

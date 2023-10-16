@@ -4,8 +4,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class TutorProfileReq {
-    @NotNull
-    @NotEmpty
     public String name;
     public String displayName;
 
