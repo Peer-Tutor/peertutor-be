@@ -70,6 +70,26 @@ public class TutorCalendarService {
         return new TutorCalendarRes(result);
     }
 
+    public TutorCalendarRes getTutorCalendar(Long tutorId, Long studentId) {
+        List<TutorCalendar> tutorCalendar = tutorCalendarRepository.findAllByTutorId(tutorId);
+
+        List<Date> dates = tutorCalendar.stream()
+                .map(c -> c.getAvailableDate())
+                .filter(d -> {
+                    LocalDate date = d.toLocalDate();
+                    LocalDate now = LocalDate.now();
+                    return now.isBefore(date) || now.isEqual(date);
+                })
+                .distinct()
+                .collect(Collectors.toList());
+        Collections.sort(dates);
+        List<String> result = dates.stream().map(date -> {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return dateFormat.format(date);
+        }).collect(Collectors.toList());
+        return new TutorCalendarRes(result);
+    }
+
     @Transactional
     public void deleteAvailableDates(Long tutorID, String dates) {
         List<TutorCalendar> tutorCalendar = tutorCalendarRepository.findAllByTutorId(tutorID);

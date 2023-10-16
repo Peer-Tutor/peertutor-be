@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path="/tutor-calendar-mgr")
@@ -56,8 +57,16 @@ public class TutorCalendarController {
 
 	@GetMapping(path = "/calendar")
 	public @ResponseBody ResponseEntity<TutorCalendarRes> getReview(
+			@RequestParam(name = "studentId") Optional<Long> studentId,
 			@RequestParam(name = "tutorId") Long tutorId) {
-		TutorCalendarRes tutorCalendar = tutorCalendarService.getTutorCalendar(tutorId);
+		TutorCalendarRes tutorCalendar = null;
+
+		if (studentId.isPresent()) {
+			tutorCalendar = tutorCalendarService.getTutorCalendar(tutorId, studentId.get());
+		} else {
+			tutorCalendarService.getTutorCalendar(tutorId);
+		}
+
 		return ResponseEntity.ok().body(tutorCalendar);
 	}
 
