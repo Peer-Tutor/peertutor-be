@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -117,6 +118,15 @@ public class TuitionOrderService {
 
             if (req.status != null && req.status != 2) {
                 List<LocalDate> aDate = availableDates.stream()
+                        .filter(date -> {
+                            try {
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                LocalDate.parse(date, formatter);
+                            } catch (DateTimeParseException e) {
+                                return false;
+                            }
+                            return true;
+                        })
                         .map(date -> {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                             return LocalDate.parse(date, formatter);
@@ -176,6 +186,14 @@ public class TuitionOrderService {
                                             .replaceAll("\\[", "")
                                             .replaceAll("\\]", "")
                                             .split(","))
+                            .filter(date -> {
+                                try {
+                                    LocalDate.parse(date.trim());
+                                } catch (DateTimeParseException e) {
+                                    return false;
+                                }
+                                return true;
+                            })
                             .map(date -> LocalDate.parse(date.trim())).anyMatch(date -> {
                                 LocalDate now = LocalDate.now();
                                 boolean test = now.isAfter(date);
@@ -199,6 +217,14 @@ public class TuitionOrderService {
                                             .replaceAll("\\[", "")
                                             .replaceAll("\\]", "")
                                             .split(","))
+                            .filter(date -> {
+                                try {
+                                    LocalDate.parse(date.trim());
+                                } catch (DateTimeParseException e) {
+                                    return false;
+                                }
+                                return true;
+                            })
                             .map(date -> LocalDate.parse(date.trim())).anyMatch(date -> {
                                 LocalDate now = LocalDate.now();
                                 boolean test = now.isAfter(date);
