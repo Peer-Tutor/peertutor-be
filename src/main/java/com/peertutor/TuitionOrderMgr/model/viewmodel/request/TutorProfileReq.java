@@ -1,14 +1,17 @@
 package com.peertutor.TuitionOrderMgr.model.viewmodel.request;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class TutorProfileReq {
+
     public String name;
+
+    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "Only alphanumeric characters and underscore are allowed")
     public String displayName;
 
     public String accountName;
 
+    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "Only alphanumeric characters and underscore are allowed")
     public String introduction;
 
     public String subjects;
