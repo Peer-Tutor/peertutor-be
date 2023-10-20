@@ -1,8 +1,8 @@
 package com.peertutor.TuitionOrderMgr.model.viewmodel.request;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentProfileReq {
     public String name;
 
